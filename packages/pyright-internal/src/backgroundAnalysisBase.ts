@@ -293,6 +293,7 @@ export class BackgroundAnalysisRunnerBase extends BackgroundThreadBase {
 
         switch (msg.requestType) {
             case 'analyze': {
+                //console.error('GOT ANALYZE');
                 const port = msg.port!;
                 const token = getCancellationTokenFromId(msg.data);
 
@@ -314,6 +315,7 @@ export class BackgroundAnalysisRunnerBase extends BackgroundThreadBase {
             }
 
             case 'resumeAnalysis': {
+                //console.error('GOT RESUME ANALYSIS');
                 const port = msg.port!;
                 const token = getCancellationTokenFromId(msg.data);
 

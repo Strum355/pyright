@@ -63,7 +63,7 @@ export function activate(context: ExtensionContext) {
     cancellationStrategy = new FileBasedCancellationStrategy();
 
     const bundlePath = context.asAbsolutePath(path.join('dist', 'server.js'));
-    const debugOptions = { execArgv: ['--nolazy', '--inspect=6600'] };
+    const debugOptions = { execArgv: ['--nolazy', '--inspect-brk=6601'] };
 
     // If the extension is launched in debug mode, then the debug server options are used.
     const serverOptions: ServerOptions = {

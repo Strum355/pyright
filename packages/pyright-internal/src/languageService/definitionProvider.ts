@@ -123,6 +123,7 @@ export class DefinitionProvider {
         }
 
         if (definitions.length === 0) {
+            //console.log('no defs');
             return undefined;
         }
 

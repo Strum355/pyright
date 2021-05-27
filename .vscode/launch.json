@@ -2,6 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "lsif-pyright",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/packages/lsif-pyright/dist/lsif-pyright.js",
+            "protocol": "inspector",
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceRoot}/packages/lsif-pyright/dist/**/*.js"
+            ]
+        },
+        {
             "name": "Pyright CLI",
             "type": "node",
             "request": "launch",
@@ -55,7 +66,7 @@
             "type": "node",
             "request": "attach",
             "protocol": "inspector",
-            "port": 6600,
+            "port": 6601,
             "smartStep": true,
             "sourceMaps": true,
             "outFiles": [

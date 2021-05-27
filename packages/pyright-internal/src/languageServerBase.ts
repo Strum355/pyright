@@ -477,6 +477,7 @@ export abstract class LanguageServerBase implements LanguageServerInterface {
                 return undefined;
             }
 
+            //this.console.log('asdfasdf');
             const locations = workspace.serviceInstance.getDefinitionForPosition(filePath, position, filter, token);
             if (!locations) {
                 return undefined;

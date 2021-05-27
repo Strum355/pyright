@@ -106,9 +106,19 @@ export class ImportResolver {
         }
     }
 
+    resolveImport(
+        sourceFilePath: string,
+        execEnv: ExecutionEnvironment,
+        moduleDescriptor: ImportedModuleDescriptor
+    ): ImportResult {
+        const res = this._resolveImport(sourceFilePath, execEnv, moduleDescriptor);
+        //console.log(`${sourceFilePath} ${moduleDescriptor.nameParts} ${JSON.stringify(res)}`);
+        return res;
+    }
+
     // Resolves the import and returns the path if it exists, otherwise
     // returns undefined.
-    resolveImport(
+    _resolveImport(
         sourceFilePath: string,
         execEnv: ExecutionEnvironment,
         moduleDescriptor: ImportedModuleDescriptor
