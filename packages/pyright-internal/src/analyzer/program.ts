@@ -480,7 +480,6 @@ export class Program {
                     continue;
                 }
 
-                console.log(sourceFileInfo.sourceFile.getFilePath());
                 this._bindFile(sourceFileInfo);
                 const results = sourceFileInfo.sourceFile.index({ indexingForAutoImportMode: false }, token);
                 if (results) {

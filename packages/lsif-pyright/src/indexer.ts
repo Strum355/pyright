@@ -8,29 +8,34 @@ import { TreeVisitor } from './parseTreeVisitor';
 import { ImportResult, ImportType } from 'pyright-internal/analyzer/importResult';
 import { IndexResults } from 'pyright-internal/languageService/documentSymbolProvider';
 
-const pyFiles = glob.sync('/home/noah/Python/mypy/**/*.py');
-const configOpts = new ConfigOptions('/home/noah/Python/mypy');
-/* const pyFiles = glob.sync('/home/noah/Python/PEPExamples/untyped.py');
-const configOpts = new ConfigOptions('/home/noah/Python/PEPExamples'); */
+import 'source-map-support/register';
+import { ParseResults } from 'pyright-internal/parser/parser';
+
+// const pyFiles = glob.sync('/home/noah/Netsoc/cloud/api/**/*.py');
+// const configOpts = new ConfigOptions('/home/noah/Netsoc/cloud/api');
+// const pyFiles = glob.sync('/home/noah/Python/transformers/**/*.py');
+// const configOpts = new ConfigOptions('/home/noah/Python/transformers');
+// const pyFiles = glob.sync('/home/noah/Python/mypy/**/*.py');
+// const configOpts = new ConfigOptions('/home/noah/Python/mypy');
+const pyFiles = glob.sync('/home/noah/Python/PEPexamples/asdf/*.py');
+const configOpts = new ConfigOptions('/home/noah/Python/PEPexamples/');
 configOpts.typeshedPath = '/home/noah/Sourcegraph/lsif-pyright/packages/pyright-internal/typeshed-fallback';
 configOpts.checkOnlyOpenFiles = false;
 configOpts.indexGenerationMode = true;
 configOpts.indexing = true;
+//configOpts.useLibraryCodeForTypes = true;
 const importResolver = new ImportResolver(createFromRealFileSystem(), configOpts);
 const program = new Program(importResolver, configOpts);
 program.setTrackedFiles(pyFiles);
 
 Error.stackTraceLimit = Infinity;
 
-const thirdpartyFiles = new Set<string>();
+/* const indexResults: Array<{ path: string; results: ParseResults | undefined }> = [];
 
 program.indexWorkspace(
     (path: string, results: IndexResults) => {
-        //console.log(path + '\n' + results.symbols.map((s) => JSON.stringify(s)));
         const parseResults = program.getSourceFile(path)?.getParseResults();
-        const tree = parseResults?.parseTree;
-        const typeEvaluator = program.evaluator;
-        new TreeVisitor(program, typeEvaluator!!, path).walk(tree!!);
+        indexResults.push({ path: path, results: parseResults });
     },
     {
         isCancellationRequested: false,
@@ -38,34 +43,26 @@ program.indexWorkspace(
     }
 );
 
-/* while (program.analyze()) {}
+indexResults.forEach((o) => {
+    const { path, results } = o;
+    //console.log(path + '\n' + results.symbols.map((s) => JSON.stringify(s)));
+    try {
+        const tree = results?.parseTree;
+        const typeEvaluator = program.evaluator;
+        if (!tree) {
+            console.log(`undefined module node for path ${path} ${tree} ${results}`);
+            return;
+        }
+        new TreeVisitor(program, typeEvaluator!!, path).walk(tree!!);
+    } catch (e) {
+        console.error(e);
+    }
+}); */
+
+program.analyze();
 for (const file of pyFiles) {
     const parseResults = program.getSourceFile(file)?.getParseResults();
-    const execEnv = configOpts.findExecEnvironment(file);
-    for (const moduleImport of parseResults!!.importedModules) {
-        const importResult = importResolver.resolveImport(file, execEnv, {
-            leadingDots: moduleImport.leadingDots,
-            nameParts: moduleImport.nameParts,
-            importedSymbols: moduleImport.importedSymbols,
-        });
-        if (
-            importResult.importType !== ImportType.ThirdParty ||
-            (importResult.importType === ImportType.ThirdParty &&
-                (importResult.isTypeshedFile || importResult.isStubFile))
-        ) {
-            continue;
-        }
-        const newThirdPartyFiles = new Set<string>();
-        importResult.resolvedPaths.forEach((p) => newThirdPartyFiles.add(p));
-        importResult.implicitImports.map((i) => i.path).forEach((p) => newThirdPartyFiles.add(p));
-        importResult.filteredImplicitImports.map((i) => i.path).forEach((p) => newThirdPartyFiles.add(p));
-        const intersection = new Set([...newThirdPartyFiles].filter((x) => thirdpartyFiles.has(x)));
-        program.addTrackedFiles([...intersection]);
-        while (program.analyze()) {}
-        intersection.forEach((p) => newThirdPartyFiles.add(p));
-    }
-    //console.log(parseResults?.importedModules.map((m) => m.));
     const tree = parseResults?.parseTree;
     const typeEvaluator = program.evaluator;
-    new TreeVisitor(program, typeEvaluator!!, file).walk(tree!!);
-} */
+    // new TreeVisitor(program, typeEvaluator!!, file).walk(tree!!);
+}

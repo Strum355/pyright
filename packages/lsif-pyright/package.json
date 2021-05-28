@@ -22,6 +22,7 @@
   "author": "Noah Santschi-Cooney (Strum355)",
   "license": "MIT",
   "dependencies": {
-    "lsif-protocol": "^0.4.3"
+    "lsif-protocol": "^0.4.3",
+    "source-map-support": "^0.5.19"
   }
 }
